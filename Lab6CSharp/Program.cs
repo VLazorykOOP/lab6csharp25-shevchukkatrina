@@ -1,58 +1,105 @@
-﻿// See https://aka.ms/new-console-template for more information
-/// <summary>
-///  Top-level statements 
-///  Код програми (оператори)  вищого рівня
-/// </summary>
-///
-Console.WriteLine("Lab6 C# ");
-AnyFunc();
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 
-/// <summary>
-/// 
-///  Top-level statements must precede namespace and type declarations.
-/// At the top-level methods/functions can be defined and used
-/// На верхньому рівні можна визначати та використовувати методи/функції
-/// </summary>
-void AnyFunc()
+class Program
 {
-    Console.WriteLine(" Some function in top-level");
-}
-Console.WriteLine("Problems 1 ");
-AnyFunc();
-//  приклад класів
-UserClass cl = new UserClass();
-cl.Name = " UserClass top-level ";
-User.UserClass cl2 = new();
-cl2.Name = " UserClass namespace User ";
-
-
-
-
-/// <summary>
-/// 
-/// Top-level statements must precede namespace and type declarations.
-/// Оператори верхнього рівня мають передувати оголошенням простору імен і типу.
-/// Створення класу(ів) або оголошенням простору імен є закіченням  іструкцій верхнього рівня
-/// 
-/// </summary>
-
-namespace User
-{
-    class UserClass
+    static void Main(string[] args)
     {
-        public string Name { get; set; }
-        public UserClass()
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+        Console.WriteLine("Введіть номер завдання:");
+        Console.WriteLine("1 - Вивід об'єктів (Detail, Mechanism, Product, Node)");
+        Console.WriteLine("2 - Завдання 2");
+        Console.WriteLine("3 - Завдання 3");
+        Console.WriteLine("4 - Завдання 4");
+        Console.Write("Ваш вибір: ");
+
+        string input = Console.ReadLine();
+
+        switch (input)
         {
-            Name = "NoName";
-        }
-        UserClass(string n)
-        {
-            Name = n;
+            case "1":
+                Task1();
+                break;
+
+            case "2":
+                Task2();
+                break;
+
+            case "3":
+                TupleProcessor.RunTupleExample();
+                break;
+            case "4":
+                Testing.RunTask4();
+                break;
+            default:
+                Console.WriteLine("Невідомий вибір.");
+                break;
         }
     }
 
-}
-class UserClass
-{
-    public string Name { get; set; }
+    static void Task1()
+    {
+        List<IShowable> items = new List<IShowable>
+        {
+            new Detail("Гвинт", 0.05),
+            new Mechanism("Редуктор", 12.5, 20),
+            new Product("Болгарка", 4.2, "Bosch"),
+            new Node("Кронштейн", 1.1, "Алюміній")
+        };
+
+        Console.WriteLine("\n Вивід об'єктів:");
+        foreach (var item in items)
+        {
+            item.Show();
+            Console.WriteLine();
+        }
+    }
+
+    static void Task2()
+    {
+        List<Client> clients = new List<Client>
+    {
+        new Depositor("Іваненко", new DateTime(2023, 5, 10), 15000, 5),
+        new Creditor("Петренко", new DateTime(2024, 1, 15), 20000, 10, 5000),
+        new Organization("ТОВ Роса", new DateTime(2023, 5, 10), "UA12345678", 500000)
+    };
+
+        Console.WriteLine("\n Повна інформація про клієнтів:");
+        foreach (var client in clients)
+        {
+            client.ShowInfo();
+            Console.WriteLine();
+        }
+
+        Console.Write("\n Введіть дату для пошуку (у форматі рррр-мм-дд): ");
+        string input = Console.ReadLine();
+        if (DateTime.TryParseExact(input, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime searchDate))
+        {
+            Console.WriteLine($"\nРезультати пошуку клієнтів на дату {searchDate.ToShortDateString()}:");
+            bool found = false;
+            foreach (var client in clients)
+            {
+                if (client.MatchesDate(searchDate))
+                {
+                    client.ShowInfo();
+                    Console.WriteLine();
+                    found = true;
+                }
+            }
+
+            if (!found)
+                Console.WriteLine("Немає клієнтів на цю дату.");
+        }
+        else
+        {
+            Console.WriteLine("Невірний формат дати.");
+        }
+    }
+
+    static void Task3()
+    {
+        Console.WriteLine("Завдання 3 ще не реалізовано.");
+    }
 }
